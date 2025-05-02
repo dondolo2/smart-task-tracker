@@ -289,31 +289,6 @@ function addToBin(taskText, wasInDoneList) {
     checkIfBinEmpty();
   });
 
-  restoreBtn.addEventListener("click", () => {
-    const restoredTask = createTaskItem(taskText);
-
-    const wasInDoneList = binItem.dataset.wasInDoneList === "true";
-
-    if (wasInDoneList) {
-      const checkbox = restoredTask.querySelector('input[type="checkbox"]');
-      const span = restoredTask.querySelector(".task-text");
-      checkbox.checked = true;
-      span.classList.add("completed");
-
-      doneList.appendChild(restoredTask);
-    } else {
-      taskList.appendChild(restoredTask);
-    }
-
-    if (doneList.children.length > 0) {
-      document.getElementById("finished-heading").style.display = "block";
-    }
-
-    //Remove from bin
-    binItem.remove();
-    checkIfBinEmpty();
-  });
-
   //Delete Permanently button
   const deleteForeverBtn = document.createElement("button");
   deleteForeverBtn.textContent = "Delete";
