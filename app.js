@@ -249,6 +249,16 @@ function addToBin(taskText, wasInDoneList) {
   buttonsDiv.style.gap = "5px";
   buttonsDiv.style.marginLeft = "auto";
 
+  const binList = document.getElementById("bin-list");
+
+  // Check if task already exists in the bin
+  const existingBinItems = binList.querySelectorAll("li span");
+  for (let span of existingBinItems) {
+    if (span.textContent.toLowerCase() === taskText.toLowerCase()) {
+      return; // Item already in bin, do not add again
+    }
+  }
+
   //Restore button
   const restoreBtn = document.createElement("button");
   restoreBtn.textContent = "Restore";
