@@ -1,0 +1,21 @@
+* When I restore items from the recycle bin, they all get returned to the taskList instead of getting sorted back to where they came from(doneList). 
+* Can we check if the wasInDone was ever defined.
+* Fix the restore button (FIXED)
+* Replace taskItem with taskText inside restore button function.
+* 3 clicks needed on Recycle Bin (FIXED)
+* Cursor flickering (FIXED)
+* have a dark mode switch
+*
+*
+
+
+------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------
+                                                      |                                                       |                                                 
+                                                      |                                                       |                           
+                                                      |                                                       |                                              
+                                                      |                                                       |                          
+                                                      |                                                       |                                                  
+                                                      |                                                       |
+                                                      |                                                       |
+                                                      |                                                       |
+||||||||||||||||||||||||||||||||||||||

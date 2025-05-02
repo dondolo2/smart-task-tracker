@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Task Tracker</title>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <div id="app">
+        <h1>Smart Task Tracker</h1>
+
+        <div id="top-buttons">
+            <div id="undo-container">
+                <img id="undo-btn" src="img/undo-btn.svg" alt="Undo">
+            </div>
+            <div id="recycle-container">
+                <img id="recycle-bin-btn" src="img/recycle-bin.svg" alt="Recycle Bin">
+            </div>
+        </div>
+        
+        <input type="text" name="task-input" id="task-input" placeholder="Enter a task">
+        <button id="add-task-btn">Add Task</button>
+        <ul id="task-list"> </ul>
+
+        <h3 id="finished-heading">Finished Items</h3>
+        <ul id="done-list"></ul>
+        </div>
+
+    </div>
+
+    <div id="modal-overlay">
+        <div id="bin-modal">
+            <div id="bin-section" class="hidden">
+                <h3>Recycle Bin</h3>
+                <ul id="bin-list"></ul>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
