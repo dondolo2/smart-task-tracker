@@ -8,6 +8,8 @@
 * if I delete and item in either taskList or doneList that already exist in the bin, make sure that you don't show it twice, but rather you only delete it from where its from.
 * if I restore an item from the bin and it already exists in either the taskList or doneList, remove it from the bin.
 * the item that is retored using the undo button should be removed from the bin.
+* add "ctrl+z" and "ctrl+shift+z" functionalities
+* if bin is empty let's no longer make the h3 invisible
 
 
 ------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------
