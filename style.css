@@ -73,6 +73,10 @@ h1 {
     cursor: grab;
 }
 
+#done-list .task-item {
+    cursor: default;
+}
+
 .task-item:hover {
     background-color: #f9f9f9;
 }
@@ -182,6 +186,8 @@ h1 {
     right: 30px;
 }
 
+
+
 #recycle-container {
     position: relative;
     text-align: center;
@@ -259,6 +265,10 @@ h1 {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     text-align: center;
     overflow-y: auto;
+}
+
+#bin-modal .task-item {
+    cursor: default;
 }
 
 /*Responsiveness*/

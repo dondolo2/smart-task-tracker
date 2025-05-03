@@ -1,15 +1,15 @@
 * When I restore items from the recycle bin, they all get returned to the taskList instead of getting sorted back to where they came from(doneList). (FIXED) 
-* Can we check if the wasInDone was ever defined.
+* Can we check if the wasInDone was ever defined. (FIXED)
 * Fix the restore button (FIXED)
 * Replace taskItem with taskText inside restore button function.
 * 3 clicks needed on Recycle Bin (FIXED)
 * Cursor flickering (FIXED)
 * have a dark mode switch
-* if I delete and item in either taskList or doneList that already exist in the bin, make sure that you don't show it twice, but rather you only delete it from where its from.
-* if I restore an item from the bin and it already exists in either the taskList or doneList, remove it from the bin.
-* the item that is retored using the undo button should be removed from the bin.
+* if I delete and item in either taskList or doneList that already exist in the bin, make sure that you don't show it twice, but rather you only delete it from where its from. (FIXED)
+* if I restore an item from the bin and it already exists in either the taskList or doneList, remove it from the bin. (FIXED)
+* the item that is retored using the undo button should be removed from the bin. (FIXED)
 * add "ctrl+z" and "ctrl+shift+z" functionalities
-* if bin is empty let's no longer make the h3 invisible
+* if bin is empty let's no longer make the h3 invisible (FIXED)
 
 
 ------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------

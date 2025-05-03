@@ -270,33 +270,56 @@ function addToBin(taskText, wasInDoneList) {
   restoreBtn.style.cursor = "pointer";
 
   restoreBtn.addEventListener("click", () => {
-    // Check if the task already exists in taskList or doneList
+    let taskText, wasInDoneList;
+
+    // Try to retrieve the most recently deleted task from the stack
+    if (deletedTasksStack.length > 0) {
+      const popped = deletedTasksStack.pop();
+      taskText = popped.text;
+      wasInDoneList = popped.wasInDoneList;
+    } else if (binItem) {
+      // If the stack is empty, fall back to getting data from the DOM element in the bin
+      taskText = binItem.querySelector("span").textContent;
+      wasInDoneList = binItem.dataset.wasInDoneList === "true";
+    } else {
+      // If there is nothing to restore, exit the function
+      return;
+    }
+
+    // Check if the task already exists in either the taskList or the doneList
     const allTasks = document.querySelectorAll(".task-text");
     const taskExists = Array.from(allTasks).some(
       (task) => task.textContent.toLowerCase() === taskText.toLowerCase()
     );
 
     if (taskExists) {
-      alert("Task already exists!");
+      // If the task already exists, remove it from the bin and stop
+      binItem.remove();
       return;
     }
 
+    // Create a new task item element using the text
     const restoredTask = createTaskItem(taskText);
 
-    if (binItem.dataset.wasInDoneList === "true") {
+    if (wasInDoneList) {
+      // If the task was originally in the done list, mark it as completed and append to doneList
       const checkbox = restoredTask.querySelector('input[type="checkbox"]');
       const span = restoredTask.querySelector(".task-text");
       checkbox.checked = true;
       span.classList.add("completed");
-
       doneList.appendChild(restoredTask);
     } else {
+      // Otherwise, append it back to the active taskList
       taskList.appendChild(restoredTask);
     }
 
-    // Remove from bin
+    // Remove the task item from the bin
     binItem.remove();
-    checkIfBinEmpty();
+
+    // If there are any tasks in the done list, show the "finished" heading
+    if (doneList.children.length > 0) {
+      document.getElementById("finished-heading").style.display = "block";
+    }
   });
 
   //Delete Permanently button
@@ -311,7 +334,6 @@ function addToBin(taskText, wasInDoneList) {
 
   deleteForeverBtn.addEventListener("click", () => {
     binItem.remove();
-    checkIfBinEmpty();
   });
 
   buttonsDiv.appendChild(restoreBtn);
@@ -319,11 +341,4 @@ function addToBin(taskText, wasInDoneList) {
   binItem.appendChild(buttonsDiv);
 
   document.getElementById("bin-list").appendChild(binItem);
-}
-
-function checkIfBinEmpty() {
-  const binList = document.getElementById("bin-list");
-  if (binList.children.length === 0) {
-    document.getElementById("bin-section").classList.add("hidden");
-  }
 }
