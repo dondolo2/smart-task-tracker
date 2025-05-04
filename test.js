@@ -26,11 +26,6 @@ function createTaskItem(taskText) {
 
   li.addEventListener("dragstart", (e) => {
     li.classList.add("dragging");
-
-    //Set the empty drag image to remove default red icon
-    // const img = new Image();
-    // img.src = "";
-    // e.dataTransfer.setDragImage(img, 0, 0)
   });
 
   li.addEventListener("dragend", (e) => {
@@ -64,6 +59,36 @@ function createTaskItem(taskText) {
 
   leftDiv.appendChild(checkbox);
   leftDiv.appendChild(span);
+
+  //Make a task item EDITABLE on click
+  span.addEventListener("click", () => {
+    //Create an input field with the task text as the default value
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = span.textContent;
+
+    //Replace span with input
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("blur", () => {
+      const newText = input.value.trim();
+
+      if (newText) {
+        span.textContent = newText; //Updates the span text with new value
+        input.replaceWith(span); //Replaces input with updated span
+      } else {
+        input.replaceWith(span); //Just replace with span if input is empty
+      }
+    });
+
+    //Allow the user to press 'Enter' to save the changes
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        input.blur(); //Trigger blur to save the new text
+      }
+    });
+  });
 
   //Delete Button functionality
   const deleteBtn = document.createElement("div");

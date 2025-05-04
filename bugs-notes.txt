@@ -10,6 +10,7 @@
 * the item that is retored using the undo button should be removed from the bin. (FIXED)
 * add "ctrl+z" and "ctrl+shift+z" functionalities
 * if bin is empty let's no longer make the h3 invisible (FIXED)
+* Make the task items in the task list editable (FIXED)
 
 
 ------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------

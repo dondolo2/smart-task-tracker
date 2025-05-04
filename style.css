@@ -117,11 +117,20 @@ h1 {
 
 .task-text {
     font-size: 16px;
+    cursor: pointer;
 }
 
 .task-text.completed {
     text-decoration: line-through;
     color: #aaa;
+}
+
+
+.task-text input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 16px;
 }
 
 
