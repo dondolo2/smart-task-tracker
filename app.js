@@ -90,7 +90,7 @@ function createTaskItem(taskText) {
     });
   });
 
-  //Delete Button functionality
+  //Move to Bin functionality
   const deleteBtn = document.createElement("div");
   deleteBtn.className = "delete-btn";
 
@@ -345,6 +345,11 @@ function addToBin(taskText, wasInDoneList) {
     if (doneList.children.length > 0) {
       document.getElementById("finished-heading").style.display = "block";
     }
+
+    //Hide Undo button
+    if (deletedTasksStack.length === 0) {
+      document.getElementById("undo-container").style.display = "none";
+    }
   });
 
   //Delete Permanently button
@@ -358,9 +363,17 @@ function addToBin(taskText, wasInDoneList) {
   deleteForeverBtn.style.cursor = "pointer";
 
   deleteForeverBtn.addEventListener("click", () => {
+    //Delete permanently
     binItem.remove();
+    deletedTasksStack.pop();
+
+    //Hide Undo button
+    if (document.querySelectorAll("#bin-list li").length === 0) {
+      document.getElementById("undo-container").style.display = "none";
+    }
   });
 
+  //Appends the buttons and the task to the list
   buttonsDiv.appendChild(restoreBtn);
   buttonsDiv.appendChild(deleteForeverBtn);
   binItem.appendChild(buttonsDiv);

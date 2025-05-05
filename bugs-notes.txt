@@ -11,6 +11,11 @@
 * add "ctrl+z" and "ctrl+shift+z" functionalities
 * if bin is empty let's no longer make the h3 invisible (FIXED)
 * Make the task items in the task list editable (FIXED)
+* make the undo btn receive the condition of the stack that is in the restore btn
+* the undo button disappear if it is empty, and it should also disappear when i delete the last child/task of the recycle bin
+* Removes the task from the bin
+*  undoBtn .pops() the most recent item from the deletedTasksStack (FIXED)
+* Hides the Undo button if the bin is empty (FIXED)
 
 
 ------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------
