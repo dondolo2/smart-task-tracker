@@ -118,8 +118,6 @@ function createTaskItem(taskText) {
     if (doneList.children.length === 0) {
       finishedHeading.style.display = "none";
     }
-
-    saveAllTasks();
   });
 
   li.appendChild(leftDiv);
@@ -243,8 +241,6 @@ undoBtn.addEventListener("click", () => {
   if (lastBinItem) {
     lastBinItem.remove();
   }
-
-  saveAllTasks();
 });
 
 const recycleBin = document.getElementById("recycle-bin-btn");
@@ -262,8 +258,6 @@ recycleBin.addEventListener("click", (e) => {
     modalOverlay.classList.add("show");
     binSection.classList.remove("hidden");
   }
-
-  saveAllTasks();
 });
 
 //Close modal if there's outside click
@@ -353,8 +347,6 @@ function addToBin(taskText, wasInDoneList) {
     if (deletedTasksStack.length === 0) {
       document.getElementById("undo-container").style.display = "none";
     }
-
-    saveAllTasks();
   });
 
   //Delete Permanently button
@@ -376,8 +368,6 @@ function addToBin(taskText, wasInDoneList) {
     if (document.querySelectorAll("#bin-list li").length === 0) {
       document.getElementById("undo-container").style.display = "none";
     }
-
-    saveAllTasks();
   });
 
   //Appends the buttons and the task to the list
@@ -401,59 +391,3 @@ toggleDarkModeBtn.addEventListener("click", () => {
     toggleDarkModeBtn.textContent = "🌙 Dark Mode";
   }
 });
-
-// On page load
-if (localStorage.getItem("darkMode") === "enabled") {
-  document.body.classList.add("dark-mode");
-}
-
-// Toggle function
-function toggleDarkMode() {
-  document.body.classList.toggle("dark-mode");
-
-  if (document.body.classList.contains("dark-mode")) {
-    localStorage.setItem("darkMode", "enabled");
-  } else {
-    localStorage.setItem("darkMode", "disabled");
-  }
-}
-
-function saveAllTasks() {
-  const activeTasks = [...taskList.querySelectorAll("li .task-text")].map(
-    (el) => el.textContent
-  );
-  const doneTasks = [...doneList.querySelectorAll("li .task-text")].map(
-    (el) => el.textContent
-  );
-  const binTasks = [...binList.querySelectorAll("li .task-text")].map(
-    (el) => el.textContent
-  );
-
-  localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
-  localStorage.setItem("doneTasks", JSON.stringify(doneTasks));
-  localStorage.setItem("binTasks", JSON.stringify(binTasks));
-}
-
-function loadTasks() {
-  const activeTasks = JSON.parse(localStorage.getItem("activeTasks") || "[]");
-  const doneTasks = JSON.parse(localStorage.getItem("doneTasks") || "[]");
-  const binTasks = JSON.parse(localStorage.getItem("binTasks") || "[]");
-
-  activeTasks.forEach((text) => {
-    const task = createTaskItem(text);
-    taskList.appendChild(task);
-  });
-
-  doneTasks.forEach((text) => {
-    const task = createTaskItem(text);
-    const checkbox = task.querySelector("input[type='checkbox']");
-    const span = task.querySelector(".task-text");
-    checkbox.checked = true;
-    span.classList.add("completed");
-    doneList.appendChild(task);
-  });
-
-  binTasks.forEach((text) => {
-    addToBin(text, false); // Or true if you track wasInDoneList
-  });
-}
