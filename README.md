@@ -52,7 +52,10 @@ Convert the app to a Progressive Web App (PWA)
 <img src="assets/screenshots/dark-mode.png" alt="Dark mode" width="300">
 
 ### Bin View
-<img src="assets/screenshots/bin-view.png" alt="Recycle Bin view" width="300">
+<img src="assets/screenshots/bin.png" alt="Recycle Bin view" width="300">
+
+###Bin Dark Mode
+<img src="assets/screenshots/bin-dark-mode.png" alt="Recycle Bin view" width="300">
 
 Author
 Developed by [Musa Dondolo] as a demonstration of functional, minimal, and modern front-end design using plain JavaScript and browser-native features.
