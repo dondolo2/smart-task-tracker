@@ -96,19 +96,20 @@ function createTaskItem(taskText) {
 
   deleteBtn.addEventListener("click", () => {
     const finishedHeading = document.getElementById("finished-heading");
+    const wasInDoneList = doneList.contains(li);
 
     //Save deleted task info
     deletedTasksStack.push({
       element: li,
       text: span.textContent,
-      wasInDoneList: doneList.contains(li),
+      wasInDoneList,
     });
 
     //Remove Task
     li.remove();
 
     //Add to bin
-    addToBin(span.textContent, doneList.contains(li));
+    addToBin(span.textContent, wasInDoneList);
 
     //Show Undo button
     document.getElementById("undo-container").style.display = "block";
@@ -117,6 +118,8 @@ function createTaskItem(taskText) {
     if (doneList.children.length === 0) {
       finishedHeading.style.display = "none";
     }
+
+    saveAllTasks();
   });
 
   li.appendChild(leftDiv);
@@ -204,36 +207,44 @@ undoBtn.addEventListener("click", () => {
   if (deletedTasksStack.length > 0) {
     const { element, text, wasInDoneList } = deletedTasksStack.pop();
 
-    //Check if duplicate exists
+    // Check for duplicates
     const allTasks = document.querySelectorAll(".task-text");
     const taskExists = Array.from(allTasks).some(
       (task) => task.textContent.toLowerCase() === text.toLowerCase()
     );
 
+    // Restore the task if not already present
     if (!taskExists) {
       const restoredTask = createTaskItem(text);
 
       if (wasInDoneList) {
-        doneList.appendChild(restoredTask);
-
         const checkbox = restoredTask.querySelector("input[type='checkbox']");
         checkbox.checked = true;
         restoredTask.querySelector(".task-text").classList.add("completed");
+        doneList.appendChild(restoredTask);
       } else {
         taskList.appendChild(restoredTask);
       }
     }
 
-    // Hide the Undo button if the stack is empty
+    //Hide the Undo button if the stack is empty
     if (deletedTasksStack.length === 0) {
       document.getElementById("undo-container").style.display = "none";
     }
 
-    // Show the heading if the doneList has tasks
+    // Show "Finished Items" heading if needed
     if (doneList.children.length > 0) {
       document.getElementById("finished-heading").style.display = "block";
     }
   }
+
+  const binList = document.getElementById("bin-list");
+  const lastBinItem = binList.lastElementChild;
+  if (lastBinItem) {
+    lastBinItem.remove();
+  }
+
+  saveAllTasks();
 });
 
 const recycleBin = document.getElementById("recycle-bin-btn");
@@ -251,6 +262,8 @@ recycleBin.addEventListener("click", (e) => {
     modalOverlay.classList.add("show");
     binSection.classList.remove("hidden");
   }
+
+  saveAllTasks();
 });
 
 //Close modal if there's outside click
@@ -295,53 +308,43 @@ function addToBin(taskText, wasInDoneList) {
   restoreBtn.style.cursor = "pointer";
 
   restoreBtn.addEventListener("click", () => {
-    let taskText, wasInDoneList;
+    const taskText = binItem.querySelector("span").textContent.trim();
+    const wasInDoneList = binItem.dataset.wasInDoneList === "true";
 
-    // Try to retrieve the most recently deleted task from the stack
-    if (deletedTasksStack.length > 0) {
-      const popped = deletedTasksStack.pop();
-      taskText = popped.text;
-      wasInDoneList = popped.wasInDoneList;
-    } else if (binItem) {
-      // If the stack is empty, fall back to getting data from the DOM element in the bin
-      taskText = binItem.querySelector("span").textContent;
-      wasInDoneList = binItem.dataset.wasInDoneList === "true";
-    } else {
-      // If there is nothing to restore, exit the function
-      return;
+    // Remove the specific task from the deletedTasksStack
+    const index = deletedTasksStack.findIndex(
+      (task) => task.text.trim().toLowerCase() === taskText.toLowerCase()
+    );
+
+    if (index !== -1) {
+      deletedTasksStack.splice(index, 1); // Remove the matched task from stack
     }
 
-    // Check if the task already exists in either the taskList or the doneList
-    const allTasks = document.querySelectorAll(".task-text");
-    const taskExists = Array.from(allTasks).some(
-      (task) => task.textContent.toLowerCase() === taskText.toLowerCase()
+    // Prevent restoring duplicates
+    const taskExists = Array.from(document.querySelectorAll(".task-text")).some(
+      (task) => task.textContent.trim().toLowerCase() === taskText.toLowerCase()
     );
 
     if (taskExists) {
-      // If the task already exists, remove it from the bin and stop
-      binItem.remove();
+      binItem.remove(); // Remove from bin only
       return;
     }
 
-    // Create a new task item element using the text
+    // Create and append the restored task
     const restoredTask = createTaskItem(taskText);
 
     if (wasInDoneList) {
-      // If the task was originally in the done list, mark it as completed and append to doneList
-      const checkbox = restoredTask.querySelector('input[type="checkbox"]');
-      const span = restoredTask.querySelector(".task-text");
+      const checkbox = restoredTask.querySelector("input[type='checkbox']");
       checkbox.checked = true;
+      restoredTask.querySelector(".task-text").classList.add("completed");
       span.classList.add("completed");
       doneList.appendChild(restoredTask);
     } else {
-      // Otherwise, append it back to the active taskList
       taskList.appendChild(restoredTask);
     }
 
-    // Remove the task item from the bin
-    binItem.remove();
+    binItem.remove(); // Remove from bin
 
-    // If there are any tasks in the done list, show the "finished" heading
     if (doneList.children.length > 0) {
       document.getElementById("finished-heading").style.display = "block";
     }
@@ -350,6 +353,8 @@ function addToBin(taskText, wasInDoneList) {
     if (deletedTasksStack.length === 0) {
       document.getElementById("undo-container").style.display = "none";
     }
+
+    saveAllTasks();
   });
 
   //Delete Permanently button
@@ -371,6 +376,8 @@ function addToBin(taskText, wasInDoneList) {
     if (document.querySelectorAll("#bin-list li").length === 0) {
       document.getElementById("undo-container").style.display = "none";
     }
+
+    saveAllTasks();
   });
 
   //Appends the buttons and the task to the list
@@ -379,4 +386,74 @@ function addToBin(taskText, wasInDoneList) {
   binItem.appendChild(buttonsDiv);
 
   document.getElementById("bin-list").appendChild(binItem);
+}
+
+//Dark Mode Functionality
+const toggleDarkModeBtn = document.getElementById("toggle-dark-mode");
+
+toggleDarkModeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  // Optional: Change button text/icon
+  if (document.body.classList.contains("dark-mode")) {
+    toggleDarkModeBtn.textContent = "☀️ Light Mode";
+  } else {
+    toggleDarkModeBtn.textContent = "🌙 Dark Mode";
+  }
+});
+
+// On page load
+if (localStorage.getItem("darkMode") === "enabled") {
+  document.body.classList.add("dark-mode");
+}
+
+// Toggle function
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+
+  if (document.body.classList.contains("dark-mode")) {
+    localStorage.setItem("darkMode", "enabled");
+  } else {
+    localStorage.setItem("darkMode", "disabled");
+  }
+}
+
+function saveAllTasks() {
+  const activeTasks = [...taskList.querySelectorAll("li .task-text")].map(
+    (el) => el.textContent
+  );
+  const doneTasks = [...doneList.querySelectorAll("li .task-text")].map(
+    (el) => el.textContent
+  );
+  const binTasks = [...binList.querySelectorAll("li .task-text")].map(
+    (el) => el.textContent
+  );
+
+  localStorage.setItem("activeTasks", JSON.stringify(activeTasks));
+  localStorage.setItem("doneTasks", JSON.stringify(doneTasks));
+  localStorage.setItem("binTasks", JSON.stringify(binTasks));
+}
+
+function loadTasks() {
+  const activeTasks = JSON.parse(localStorage.getItem("activeTasks") || "[]");
+  const doneTasks = JSON.parse(localStorage.getItem("doneTasks") || "[]");
+  const binTasks = JSON.parse(localStorage.getItem("binTasks") || "[]");
+
+  activeTasks.forEach((text) => {
+    const task = createTaskItem(text);
+    taskList.appendChild(task);
+  });
+
+  doneTasks.forEach((text) => {
+    const task = createTaskItem(text);
+    const checkbox = task.querySelector("input[type='checkbox']");
+    const span = task.querySelector(".task-text");
+    checkbox.checked = true;
+    span.classList.add("completed");
+    doneList.appendChild(task);
+  });
+
+  binTasks.forEach((text) => {
+    addToBin(text, false); // Or true if you track wasInDoneList
+  });
 }

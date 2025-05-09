@@ -222,6 +222,29 @@ h1 {
     transform: scale(1.1);
 }
 
+#dark-mode-container {
+    position: relative;
+    text-align: center;
+    margin-top: 6px;
+}
+
+#toggle-dark-mode {
+    width: 60px;
+    height: 60px;
+    padding: 8px 14px;
+    font-size: 10px;
+    background-color: #3498db;
+    border: none;
+    border-radius: 6px;
+    
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#toggle-dark-mode:hover {
+    transform: scale(1.1);
+}
+
 #bin-section {
     background: #fafafa;
     border-radius: 8px;
@@ -280,6 +303,15 @@ h1 {
     cursor: default;
 }
 
+/* Default (Light Mode) */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+
+
 /*Responsiveness*/
 @media (max-width: 600px) {
     #task-input {
@@ -304,4 +336,66 @@ h1 {
     #add-task-btn {
         display: block;
     }
+}
+
+/* Keep this somewhere near the bottom of your CSS so it overrides default styles */
+.dark-mode {
+    /* Body background */
+    background-color: #121212;
+    color: #E0E0E0;
+}
+
+.dark-mode #app {
+    box-shadow: 0 2px 6px rgba(147, 162, 164, 0.5);
+}
+
+.dark-mode input[type="text"] {
+    background-color: #B0B0B0;
+    /* Secondary text as background */
+    color: #121212;
+    /* Charcoal black text for contrast */
+    border: none;
+}
+
+.dark-mode #app,
+.dark-mode .bin-modal {
+    background-color: #B0B0B0;
+    /* Secondary text background */
+    color: white;
+}
+
+.dark-mode li {
+    background-color: #333;
+    color: #121212;
+    box-shadow: 0 2px 6px rgba(73, 218, 244, 0.5);
+    border: none;
+}
+
+.dark-mode li:hover {
+    background-color: #6c6a6a;
+    box-shadow: 0 2px 6px rgba(159, 174, 177, 0.9);
+}
+
+.dark-mode #bin-modal, #bin-section {
+    background-color: #888888;
+    color: white
+    /* Accent color */
+}
+
+
+.dark-mode .secondary-text {
+    color: #B0B0B0;
+}
+
+/* Modal overlay remains unchanged */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Keep as is */
+}
+
+/* Buttons remain blue */
+button {
+    background-color: #007BFF;
+    /* Bootstrap-style blue */
+    color: white;
 }
